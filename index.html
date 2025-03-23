@@ -10,32 +10,31 @@
 
 <body>
     <script>
-        function countTreasures(s, queries) {
-            const n = s.length;
-            const prefix = new Array(n + 1).fill(0);
-            for (let i = 1; i <= n; i++) {
-                prefix[i] = prefix[i - 1] + (s[i - 1] === 'T' ? 1 : 0);
+        function findMinOfMax(k,n,brightness) {
+            let r = [];
+            let minOfMax = Infinity;
+            for (let i = 0; i < n; i++) {
+                if (r.length > 0 && r[0] < i - k + 1) {
+                    r.shift();
+                }
+                while (r.length > 0 && brightness[r[r.length - 1]] <= brightness[i]) {
+                    r.pop();
+                }
+                r.push(i);
+                if (i >= k - 1) {
+                    minOfMax = Math.min(minOfMax, brightness[r[0]]);
+                }
             }
 
-            const results = [];
-            queries.forEach(([start, end]) => {
-                results.push(prefix[end] - prefix[start - 1]);
-            });
-
-            return results;
+            return minOfMax;
         }
+        const k = 3;
+        const n = 7;
+        const brightness = [1, 3, 5, 2, 8, 6, 4];
+        const result = findMinOfMax(k, n, brightness);
+        console.log(result);
 
-        const s = "T.T.TT.T";
-        
-        
-        const queries = [
-            [2, 5],
-            [1, 7],
-            [4, 8]
-        ];
 
-        const results = countTreasures(s, queries);
-        results.forEach(result => console.log(result));
 
 
     </script>
